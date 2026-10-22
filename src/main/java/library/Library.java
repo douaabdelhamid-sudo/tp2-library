@@ -71,4 +71,11 @@ public class Library {
         copy.setAvailable(true);
         return loan;
     }
+
+    public List<Book> searchByTitle(String keyword) {
+        String k = keyword.toLowerCase();
+        return books.values().stream()
+                .filter(b -> b.getTitle().toLowerCase().contains(k))
+                .toList();
+    }
 }
