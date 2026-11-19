@@ -1,0 +1,103 @@
+@startuml
+
+' تحديد اتجاه المخطط من اليسار إلى اليمين
+left to right direction
+
+' =================================
+' 1. تعريف الممثلين (Actors)
+' =================================
+
+actor User
+actor Member
+actor Librarian
+actor "Mail server" as Mail <<system>>
+
+' =================================
+' 2. إنشاء حدود نظام المكتبة
+' =================================
+
+rectangle "Library system" {
+
+    ' البحث في فهرس المكتبة
+    usecase "Search the catalog" as Search
+
+    ' حجز كتاب
+    usecase "Reserve a book" as Reserve
+
+    ' تجديد إعارة كتاب
+    usecase "Renew a loan" as Renew
+
+    ' تسجيل إعارة كتاب
+    usecase "Register a loan" as Lend
+
+    ' تسجيل إرجاع كتاب مع نقطة امتداد
+    usecase Return as "Register a return
+    --
+    extension points
+    late return"
+
+    ' تعليق عضوية المستخدم
+    usecase "Suspend the member" as Suspend
+
+    ' إدارة فهرس المكتبة
+    usecase "Manage the catalog" as Manage
+
+    ' التحقق من حقوق استعارة الكتب
+    usecase "Check borrowing rights" as Check
+}
+
+' =================================
+' 3. علاقة الوراثة (Generalization)
+' =================================
+
+' Member و Librarian نوعان من User
+User <|-- Member
+User <|-- Librarian
+
+' =================================
+' 4. علاقات الارتباط (Association)
+' =================================
+
+' المستخدم يبحث في فهرس المكتبة
+User -- Search
+
+' العضو يحجز ويجدد الكتب
+Member -- Reserve
+Member -- Renew
+
+' أمين المكتبة يسجل الإعارة والإرجاع
+Librarian -- Lend
+Librarian -- Return
+Librarian -- Manage
+
+' خادم البريد مرتبط بحجز الكتاب
+Mail -- Reserve
+
+' =================================
+' 5. علاقة التضمين (Include)
+' =================================
+
+' تجديد الإعارة يتضمن التحقق من حقوق الاستعارة
+Renew ..> Check : <<include>>
+
+' تسجيل الإعارة يتضمن التحقق من حقوق الاستعارة
+Lend ..> Check : <<include>>
+
+' =================================
+' 6. علاقة الامتداد (Extend)
+' =================================
+
+' إرجاع الكتاب يمكن أن يمتد إلى تعليق العضوية
+Return ..> Suspend : <<extend>>
+
+' =================================
+' 7. إضافة ملاحظة (Note)
+' =================================
+
+' توضيح شرط تعليق العضوية
+note right of Suspend
+  condition: {returned late}
+  extension point: late return
+end note
+
+@enduml

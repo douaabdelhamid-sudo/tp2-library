@@ -1,0 +1,67 @@
+@startuml
+
+' تعريف أول قسم قبل بداية المخطط
+|Librarian|
+
+' بداية المخطط
+start
+
+' الخطوة 1: تحديد العضو
+:Identify the member by scanning their card;
+
+' الانتقال إلى قسم النظام
+|System|
+
+' الخطوة 2: عرض معلومات العضو
+:Display member information and current loans;
+
+' الخطوة 3: التحقق من حقوق الاستعارة
+:Check member's borrowing rights;
+
+if (Borrowing rights granted?) then (Yes)
+
+else (No)
+
+    ' الاستثناء 3a
+    :Display the reason for refusal;
+    stop
+
+endif
+
+' تكرار الخطوتين 4 و5
+repeat
+
+    ' الخطوة 4: أمين المكتبة
+    |Librarian|
+    :Scan the barcode of a copy;
+
+    ' الخطوة 5: النظام
+    |System|
+    :Check copy availability and reservation;
+
+    if (Copy available and not reserved?) then (Yes)
+
+        :Record the loan with a due date;
+        :Mark the copy as borrowed;
+
+    else (No)
+
+        ' الاستثناء 5a
+        :Refuse this copy and display the reservation;
+
+    endif
+
+repeat while (Another copy to process?) is (Yes) not (No)
+
+' الخطوة 7: إنهاء العملية
+|Librarian|
+:End the transaction;
+
+' الخطوة 8: طباعة الوصل
+|System|
+:Print receipt with copies and due dates;
+
+' نهاية المخطط
+stop
+
+@enduml

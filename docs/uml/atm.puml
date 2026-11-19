@@ -1,0 +1,14 @@
+@startuml
+
+left to right direction
+actor Customer
+
+rectangle "ATM" {
+  usecase "Withdraw cash" as Withdraw
+  usecase "Check the balance" as Balance
+}
+
+Customer --> Withdraw
+Customer -- Balance
+
+@enduml
