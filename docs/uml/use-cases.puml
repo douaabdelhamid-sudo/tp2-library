@@ -28,7 +28,7 @@ rectangle "Library system" {
     usecase "Renew a loan" as Renew
 
     ' تسجيل إعارة كتاب
-    usecase "Lend copies" as Lend
+    usecase "Register a loan" as Lend
 
     ' تسجيل إرجاع كتاب مع نقطة امتداد
     usecase Return as "Register a return

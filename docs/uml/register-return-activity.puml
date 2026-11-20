@@ -12,37 +12,46 @@ start
 ' مسح الباركود للتعرف على الكتاب
 
 |System|
-:Find the corresponding loan;
-' البحث عن عملية الاستعارة المرتبطة بالكتاب
-:Close the loan;
-' إغلاق عملية الاستعارة
-:Record the return date;
-' تسجيل تاريخ إرجاع الكتاب
+if (Is the copy on loan?) then (Yes)
+  ' التحقق مما إذا كانت النسخة في حالة إعارة
+  :Find the corresponding loan;
+  ' البحث عن عملية الاستعارة المرتبطة بالكتاب
+  :Close the loan;
+  ' إغلاق عملية الاستعارة
+  :Record the return date;
+  ' تسجيل تاريخ إرجاع الكتاب
 
-if (Is the return late?) then (Yes)
-  ' التحقق مما إذا كان الكتاب قد أُرجع متأخراً
-  :Activate UC-08 Suspend the member;
-  ' تفعيل حالة تعليق عضوية العضو
+  if (Is the return late?) then (Yes)
+    ' التحقق مما إذا كان الكتاب قد أُرجع متأخراً
+    :Activate UC-08 Suspend the member;
+    ' تفعيل حالة تعليق عضوية العضو
+  else (No)
+    ' إذا لم يكن الإرجاع متأخراً نواصل العملية
+  endif
+
+  if (Is the copy reserved?) then (Yes)
+    ' التحقق مما إذا كان الكتاب محجوزاً لعضو آخر
+    :Keep the copy aside;
+    ' الاحتفاظ بالكتاب جانباً للعضو الذي حجزه
+
+    |Mail server|
+    :Notify the member who reserved the copy;
+    ' إرسال إشعار إلى العضو الذي قام بالحجز
+
+    |System|
+  else (No)
+    :Make the copy available;
+    ' جعل الكتاب متاحاً للاستعارة
+  endif
+
+  :Print the receipt;
+  ' طباعة وصل الإرجاع
+  stop
+
 else (No)
-  ' إذا لم يكن الإرجاع متأخراً نواصل العملية
+  :Display error message;
+  ' عرض رسالة خطأ لأن النسخة ليست في حالة إعارة
+  stop
 endif
-
-if (Is the copy reserved?) then (Yes)
-  ' التحقق مما إذا كان الكتاب محجوزاً لعضو آخر
-  :Keep the copy aside;
-  ' الاحتفاظ بالكتاب جانباً للعضو الذي حجزه
-
-  |Mail server|
-  :Notify the member who reserved the copy;
-  ' إرسال إشعار إلى العضو الذي قام بالحجز
-
-else (No)
-  |System|
-  :Make the copy available;
-  ' جعل الكتاب متاحاً للاستعارة
-endif
-
-stop
-' نهاية عملية إرجاع الكتاب
 
 @enduml
