@@ -2,9 +2,9 @@ package library.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
 public class Book {
     private final String isbn;
     private final String title;
@@ -38,6 +38,7 @@ public class Book {
     void addReservation(Reservation reservation) {
         if (reservation != null && !reservations.contains(reservation)) {
             reservations.add(reservation);
+            reservations.sort(Comparator.comparing(Reservation::getDate));
         }
     }
 

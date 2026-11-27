@@ -135,4 +135,12 @@ class ModelTest {
         assertEquals(res, book.firstReservation());
         assertEquals(teacher, res.getMember());
     }
-}
+
+@Test
+void firstReservationReturnsOldestRegardlessOfInsertionOrder() {
+    Member teacher = new TeacherMember("T-01", "Teacher 1", "t1@example.org", "CS");
+    Reservation later = student.reserve(book, DAY.plusDays(3));
+    Reservation older = teacher.reserve(book, DAY.plusDays(1));
+    assertEquals(older, book.firstReservation());
+    assertEquals(later, book.getReservations().get(1));
+}}
