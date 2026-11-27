@@ -1,0 +1,66 @@
+@startuml
+object "a1 : Author" as a1 {
+  name = "Ian Sommerville"
+}
+
+object "a2 : Author" as a2 {
+  name = "Second Author"
+}
+
+object "b : Book" as b {
+  isbn = "978-0-00-000001-1"
+  title = "Software Engineering"
+  year = 2016
+}
+
+object "c1 : Copy" as c1 {
+  inventoryNumber = "C-001"
+  status = CopyStatus.BORROWED
+}
+
+object "c2 : Copy" as c2 {
+  inventoryNumber = "C-002"
+  status = CopyStatus.BORROWED
+}
+
+object "s : StudentMember" as s {
+  memberNumber = "M-01"
+  name = "Student 1"
+  email = "s1@example.org"
+  level = "L3"
+}
+
+object "l1 : Loan" as l1 {
+  loanDate = 2026-10-01
+  dueDate = 2026-10-15
+  returnDate = null
+}
+
+object "l2 : Loan" as l2 {
+  loanDate = 2026-10-01
+  dueDate = 2026-10-15
+  returnDate = null
+}
+
+object "t : TeacherMember" as t {
+  memberNumber = "T-01"
+  name = "Teacher 1"
+  email = "t1@example.org"
+  department = "Computer Science"
+}
+
+object "r1 : Reservation" as r1 {
+  date = 2026-10-02
+}
+
+b -- a1
+b -- a2
+b -- c1
+b -- c2
+s -- l1
+l1 -- c1
+s -- l2
+l2 -- c2
+t -- r1
+r1 -- b
+@enduml
